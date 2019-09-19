@@ -3,6 +3,7 @@ package com.daishu.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.daishu.pojo.TbBrand;
 import com.daishu.sellergoods.service.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,14 +18,11 @@ import java.util.List;
 @RequestMapping("/brand")
 public class BrandController {
 
-    @Reference(version = "1.0.0")
+    @Reference
     private BrandService brandService;
 
-    @RequestMapping("/tes")
+    @RequestMapping("/findAll")
     public List<TbBrand> findAll() {
-        System.out.println("啊啊");
-        System.out.println("呀呀呀");
-        System.out.println("在不好弄死你");
         return brandService.findAll();
     }
 }

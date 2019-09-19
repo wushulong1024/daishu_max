@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface TbBrandMapper {
+
     long countByExample(TbBrandExample example);
 
     int deleteByExample(TbBrandExample example);
