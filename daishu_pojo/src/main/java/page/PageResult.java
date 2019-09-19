@@ -7,6 +7,7 @@ import java.util.List;
  * @author shkstart
  * @create 2019-09-19 14:46
  */
+
 public class PageResult implements Serializable {
         private long total; //总记录数
         private List rows;//当前页记录

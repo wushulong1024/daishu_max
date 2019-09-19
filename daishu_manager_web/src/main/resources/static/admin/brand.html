@@ -11,10 +11,19 @@
     <link rel="stylesheet" href="../css/style.css">
 	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+	<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script><!--导入js包-->
+
+	<!-- 分页组件开始 -->
+		<script src="../plugins/angularjs/pagination.js"></script>
+		<link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+	<!-- 分页组件结束 -->
+
 
 	<script type="text/javascript" >
-		var app=angular.module('daishu',[]);
+
+		var app=angular.module('daishu',['pagination']);
+
 		app.controller('brandcontroller',function ($scope,$http) {
 
 			//查询数据
@@ -25,6 +34,33 @@
 						}
 				);
 			}
+
+		//分页控件配置		onChange 是当页码变更后自动触发的方法
+		$scope.paginationConf = {
+			currentPage: 1,//当前页
+			totalItems: 10,//总记录数
+			itemsPerPage: 5,//每页记录数
+			perPageOptions: [10, 20, 30, 40, 50], //分页选项
+
+			onChange: function(){
+				$scope.reloadList(); //调$scope.reloadLis（）方法刷新列表
+			}
+		};
+
+		//刷新列表
+		$scope.reloadList=function(){
+			$scope.findPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage)
+		}
+
+		$scope.findPage=function (page,size) {
+			$http.get('../brand/findPage?page='+page+'&size='+size).success(
+				function (response) {
+					$scope.list=response.rows;//显示当前数据
+					$scope.paginationConf.totalItems=response.total;//更新总记录数
+				}
+			)
+		}
+
 		});
 
 
@@ -35,10 +71,10 @@
 
 
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="daishu" ng-controller="brandcontroller" ng-init="findAll()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="daishu" ng-controller="brandcontroller" >
   <!-- .box-body -->
                     <div class="box-header with-border">
-                        <h3 class="box-title">品牌管理1</h3>
+                        <h3 class="box-title">品牌管理</h3>
                     </div>
 
                     <div class="box-body">
@@ -89,9 +125,12 @@
 			                      </tbody>
 			                  </table>
 			                  <!--数据列表/-->
+							<!-- 分页 -->
+							<tm-pagination conf="paginationConf"></tm-pagination>
 
 
-                        </div>
+
+						</div>
                         <!-- 数据表格 /-->
 
 
