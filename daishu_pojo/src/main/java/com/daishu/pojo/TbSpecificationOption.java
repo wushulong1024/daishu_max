@@ -1,6 +1,8 @@
 package com.daishu.pojo;
 
-public class TbSpecificationOption {
+import java.io.Serializable;
+
+public class TbSpecificationOption  implements Serializable {
     private Long id;
 
     private String optionName;

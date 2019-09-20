@@ -1,6 +1,8 @@
 package com.daishu.pojo;
 
-public class TbGoodsDesc {
+import java.io.Serializable;
+
+public class TbGoodsDesc implements Serializable {
     private Long goodsId;
 
     private String introduction;

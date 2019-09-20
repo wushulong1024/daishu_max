@@ -12,6 +12,7 @@
         <module>daishu_pojo</module>
         <module>daishu_common</module>
         <module>daishu_sellergoods_interface</module>
+        <module>cart_interface</module>
     </modules>
 
 
