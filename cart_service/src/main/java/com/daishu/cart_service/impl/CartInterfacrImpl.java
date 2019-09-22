@@ -8,17 +8,19 @@ import com.daishu.mapper.TbItemMapper;
 import com.daishu.pojo.TbItem;
 import com.daishu.pojo.TbOrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service(version = "0.0.1-SNAPSHOT",timeout = 2000)
+@Service(version = "0.0.1-SNAPSHOT",timeout = 6000)
 @EnableDubbo
 public class CartInterfacrImpl implements CartInterface {
     @Autowired
     private TbItemMapper itemMapper;
-
+    @Autowired
+    private RedisTemplate<Object,Object> redisTemplate;
     @Override
     public List<Cart> addGoodsToCartList(List<Cart> cartList, Long id, Integer num) {
         //1.根据数据库ID查询商品明细数据库的对象
@@ -58,7 +60,7 @@ public class CartInterfacrImpl implements CartInterface {
             } else {
                 //5.2如果存在，在原有的数量上添加数量，并且更新金额
                 orderItem.setNum(orderItem.getNum()+num);
-                orderItem.setPrice(new BigDecimal(orderItem.getPrice().doubleValue()*orderItem.getNum().doubleValue()));
+                orderItem.setTotalFee(new BigDecimal(orderItem.getPrice().doubleValue()*orderItem.getNum().doubleValue()));
                 //当明细的数量小于等于0，移除此明细
                 if (orderItem.getNum()<=0){
                     cart.getOrderItemlist().remove(orderItem);
@@ -69,6 +71,43 @@ public class CartInterfacrImpl implements CartInterface {
             }
         }
         return cartList;
+    }
+    /*
+        从redis中通过用户名查找购物车
+     */
+    @Override
+    public List<Cart> findCartListFromRedis(String username) {
+        List<Cart> cartlist = (List<Cart>) redisTemplate.boundHashOps("cartList").get(username);
+        if (cartlist==null){
+            cartlist= new ArrayList<>();
+        }
+        return cartlist;
+    }
+
+    /**
+     * 保存购物车到redis
+     * @param username
+     * @param cartList
+     */
+    @Override
+    public void saveCartListToRedis(String username, List<Cart> cartList) {
+        redisTemplate.boundHashOps("cartList").put(username,cartList);
+    }
+
+    /**
+     * 合并购物车
+     * @param cartList1
+     * @param cartList2
+     * @return
+     */
+    @Override
+    public List<Cart> mergeCartList(List<Cart> cartList1, List<Cart> cartList2) {
+        for (Cart cart:cartList1) {
+            for (TbOrderItem orderItem:cart.getOrderItemlist()) {
+                 cartList1 = addGoodsToCartList(cartList2, orderItem.getId(), orderItem.getNum());
+            }
+        }
+        return cartList1;
     }
 
     /**

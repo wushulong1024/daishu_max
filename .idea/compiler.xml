@@ -7,12 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="daishu_sellergoods_interface" />
+        <module name="cart_interface" />
         <module name="daishu_sellergoods_service" />
         <module name="daishu_pojo" />
         <module name="cart_service" />
         <module name="daishu_common" />
         <module name="cart_web" />
-        <module name="cart_interface" />
         <module name="daishu_manager_web" />
       </profile>
     </annotationProcessing>
