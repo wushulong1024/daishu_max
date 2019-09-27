@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/daishu_common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_page_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_page_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_page_web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_pay_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_pay_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_search_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_search_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_search_web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_seckill2_interfacd" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_seckill_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_seckill_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_seckill_web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_solr_pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/daishu_solr_utlis" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
