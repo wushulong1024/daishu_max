@@ -14,16 +14,84 @@
     <link rel="stylesheet" href="../css/style.css">
 	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    
+
+
+	<script src="../plugins/angularjs/angular.min.js"></script>
+	<script src="../plugins/angularjs/pagination.js"></script>
+	<link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+	<script type="text/javascript" >
+	var app=angular.module('pinyougou',['pagination']);
+
+	app.controller('selectorller',function ($scope,$http) {
+
+
+	//查询实体
+		$scope.findOne=function(id){
+			$http.get('../seller/findOne?id='+id).success(
+					function(response){
+						$scope.entity= response;
+					}
+			);
+		}
+
+
+
+
+        //分页控件配置
+        $scope.paginationConf = {
+            currentPage: 1,
+            totalItems: 10,
+            itemsPerPage: 10,
+            perPageOptions: [10, 20, 30, 40, 50],
+            onChange: function(){
+                $scope.sellerRelod();//重新加载
+            }
+        };
+        $scope.sellerSearch={status:'0'};//定义搜索对象
+
+        //搜索
+        $scope.search=function(page,rows){
+             $http.post('../seller/search?page='+page+"&rows="+rows, $scope.sellerSearch).success(
+                function(response){
+                    $scope.list=response.rows;
+                    $scope.paginationConf.totalItems=response.total;//更新总记录数
+                }
+            );
+        }
+
+        $scope.sellerRelod=function () {
+            $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+        }
+
+
+
+        //状态更改   0：未审核   1：已审核   2：审核未通过   3：关闭
+        $scope.updateStatus=function(sellerId,status){
+            $http.get('../seller/updateStatus?sellerId='+sellerId+'&status='+status).success(
+                function (response) {
+                    if(response.success){
+                        $scope.sellerRelod();//重新加载
+                    }else{
+                        alert(response.message);
+                    }
+                }
+            )
+
+        }
+    });
+</script>
+
+
 </head>
 
-<body class="hold-transition skin-red sidebar-mini"  >
+<body class="hold-transition skin-red sidebar-mini"  ng-app="pinyougou" ng-controller="selectorller" ng-init="sellerRelod()">
+
+
   <!-- .box-body -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">商家审核</h3>
+                        <h3 class="box-title" >商家审核</h3>
                     </div>
-
                     <div class="box-body">
 
                         <!-- 数据表格 -->
@@ -33,9 +101,10 @@
                             
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							        公司名称：<input  >
-									店铺名称： <input  >									
-									<button class="btn btn-default" >查询</button>                                    
+							        公司名称：<input  ng-model="sellerSearch.name"  >
+									店铺名称： <input ng-model="sellerSearch.nickName" >
+
+									<button class="btn btn-default" ng-click="sellerRelod()">查询</button>
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -57,40 +126,30 @@
 			                          </tr>
 			                      </thead>
 			                      <tbody>
-			                          <tr>
-			                              <td><input  type="checkbox"></td>			                              
-				                          <td>1</td>
-									      <td>梦琪琪商贸有限公司</td>
-									      <td>梦琪琪</td>
-									      <td>李梦琪</td>
-									      <td>13402312232</td>
-		                                 
-		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>                                           
-		                                  </td>
-			                          </tr>
-									  <tr>
-			                              <td><input  type="checkbox"></td>			                              
-				                          <td>2</td>
-									      <td>黑瞎子苹果专卖店</td>
-									      <td>黑瞎子</td>
-									      <td>孙大鹏</td>
-									      <td>13622244111</td>
-		                                  
-		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>                                           
+
+
+								     <tr ng-repeat="entity in list">
+			                              <td><input  type="checkbox"></td>
+				                          <td>{{entity.sellerId}}</td>
+									      <td>{{entity.name}}</td>
+									      <td>{{entity.nickName}}</td>
+									      <td>{{entity.linkmanName}}</td>
+									      <td>{{entity.linkmanMobile}}</td>
+
+		                                  <td class="text-center">
+		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" ng-click="findOne(entity.sellerId)">详情</button>
 		                                  </td>
 			                          </tr>
 			                      </tbody>
 			                  </table>
-			                  <!--数据列表/-->                        
-							  
-							 
+			                  <!--数据列表/-->
                         </div>
                         <!-- 数据表格 /-->
-                        
-                        
-                        
+                        <!-- 分页 -->
+                        <tm-pagination conf="paginationConf"></tm-pagination>
+
+
+
                         
                      </div>
                     <!-- /.box-body -->
@@ -123,19 +182,19 @@
 			      <table class="table table-bordered table-striped"  width="800px">
 			      	<tr>
 			      		<td>公司名称</td>
-			      		<td>美琪数码经营店</td>
+			      		<td>{{entity.name}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>公司手机</td>
-			      		<td>13900221212</td>
+			      		<td>{{entity.mobile}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>公司电话</td>
-			      		<td>010-20112222</td>
+			      		<td>{{entity.telephone}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>公司详细地址</td>
-			      		<td>北京市西三旗建材城西路888号</td>
+			      		<td>{{entity.addressDetail}}</td>
 			      	</tr>
 			      </table>			      
       			</div>	
@@ -144,19 +203,19 @@
 					<table class="table table-bordered table-striped" >
 			      	<tr>
 			      		<td>联系人姓名</td>
-			      		<td>王美琪</td>
+			      		<td>{{entity.linkmanName}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>联系人QQ</td>
-			      		<td>78223322</td>
+			      		<td>{{entity.linkmanQq}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>联系人手机</td>
-			      		<td>13500223322</td>
+			      		<td>{{entity.linkmanMobile}}</td>
 			      	</tr>
 			      	<tr>
 			      		<td>联系人E-Mail</td>
-			      		<td>78223322@qq.com</td>
+			      		<td>{{entity.linkmanEmail}}</td>
 			      	</tr>
 			      </table>
 			    </div>
@@ -165,15 +224,15 @@
 					<table class="table table-bordered table-striped" >
 				      	<tr>
 				      		<td>营业执照号</td>
-				      		<td>330106000109206</td>
+				      		<td>{{entity.licenseNumber}}</td>
 				      	</tr>
 				      	<tr>
 				      		<td>税务登记证号</td>
-				      		<td>0292039393011</td>
+				      		<td>{{entity.taxNumber}}</td>
 				      	</tr>
 				      	<tr>
 				      		<td>组织机构代码证号</td>
-				      		<td>22320320302421</td>
+				      		<td>{{entity.orgNumber}}</td>
 				      	</tr>				      	
 			     	</table>
 			    </div>
@@ -182,11 +241,11 @@
 					<table class="table table-bordered table-striped" >
 				      	<tr>
 				      		<td>法定代表人</td>
-				      		<td>王小聪</td>
+				      		<td>{{entity.legalPerson}}</td>
 				      	</tr>
 				      	<tr>
 				      		<td>法定代表人身份证号</td>
-				      		<td>211030198503223122</td>
+				      		<td>{{entity.legalPersonCardId}}</td>
 				      	</tr>					   			      	
 			     	</table>
 			    </div>
@@ -195,11 +254,11 @@
 					<table class="table table-bordered table-striped" >
 				      	<tr>
 				      		<td>开户行名称</td>
-				      		<td>中国建设银行北京市分行</td>
+				      		<td>{{entity.bankUser}}</td>
 				      	</tr>
 				      	<tr>
 				      		<td>开户行支行</td>
-				      		<td>海淀支行</td>
+				      		<td>{{entity.bankName}}</td>
 				      	</tr>		
 				      	<tr>
 				      		<td>银行账号</td>
@@ -213,15 +272,16 @@
 			
 		</div>
 		<div class="modal-footer">						
-			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">审核通过</button>
-         	<button class="btn btn-danger"  data-dismiss="modal" aria-hidden="true">审核未通过</button>
-            <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭商家</button>
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.sellerId,'1')">审核通过</button>
+         	<button class="btn btn-danger"  data-dismiss="modal" aria-hidden="true"ng-click="updateStatus(entity.sellerId,'2')">审核未通过</button>
+            <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true"ng-click="updateStatus(entity.sellerId,'3')">关闭商家</button>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>
 	</div>
 </div>
-
+</div>
+</div>
 
 </body>
 
