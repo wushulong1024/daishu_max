@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbPayLog;
 import com.daishu.pojo.TbPayLogExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbPayLogMapper {
     long countByExample(TbPayLogExample example);
 

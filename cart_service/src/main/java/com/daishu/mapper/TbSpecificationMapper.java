@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbSpecification;
 import com.daishu.pojo.TbSpecificationExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbSpecificationMapper {
     long countByExample(TbSpecificationExample example);
 

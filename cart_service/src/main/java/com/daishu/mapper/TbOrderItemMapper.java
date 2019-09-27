@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbOrderItem;
 import com.daishu.pojo.TbOrderItemExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbOrderItemMapper {
     long countByExample(TbOrderItemExample example);
 

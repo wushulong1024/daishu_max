@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbItemCat;
 import com.daishu.pojo.TbItemCatExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbItemCatMapper {
     long countByExample(TbItemCatExample example);
 

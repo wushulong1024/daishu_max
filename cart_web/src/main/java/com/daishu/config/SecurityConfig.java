@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()//配置安全策略
                 .antMatchers("/cart.html","/cart/**","/css/**","/img/**","/js/**","/plugins/**").permitAll()
+                .antMatchers("/order/**").hasAnyAuthority("ROLE_USER")
                 .anyRequest().authenticated()//其余的所有请求都需要验证
                 .and()
                 .logout()
@@ -60,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(casLogoutFilter(), LogoutFilter.class)
                 .addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class);
 
-        //http.csrf().disable(); //禁用CSRF
+        http.csrf().disable(); //禁用CSRF
     }
 
     /**认证的入口*/
@@ -136,4 +137,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         logoutFilter.setFilterProcessesUrl(casProperties.getAppLogoutUrl());
         return logoutFilter;
     }
+
+
 }

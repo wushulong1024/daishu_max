@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbTypeTemplate;
 import com.daishu.pojo.TbTypeTemplateExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbTypeTemplateMapper {
     long countByExample(TbTypeTemplateExample example);
 

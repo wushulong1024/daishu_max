@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbContentCategory;
 import com.daishu.pojo.TbContentCategoryExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbContentCategoryMapper {
     long countByExample(TbContentCategoryExample example);
 

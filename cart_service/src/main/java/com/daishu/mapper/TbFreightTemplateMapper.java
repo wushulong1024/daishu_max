@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbFreightTemplate;
 import com.daishu.pojo.TbFreightTemplateExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbFreightTemplateMapper {
     long countByExample(TbFreightTemplateExample example);
 

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/cart_interface" />
+    <file type="web" url="file://$PROJECT_DIR$/daishu_order_service" />
+    <file type="web" url="file://$PROJECT_DIR$/daishu_user_service" />
+    <file type="web" url="file://$PROJECT_DIR$/daishu_user_web" />
+  </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
@@ -12,6 +18,9 @@
         <option value="$PROJECT_DIR$/daishu_manager_web/pom.xml" />
         <option value="$PROJECT_DIR$/cart_service/pom.xml" />
         <option value="$PROJECT_DIR$/cart_web/pom.xml" />
+        <option value="$PROJECT_DIR$/daishu_user_service/pom.xml" />
+        <option value="$PROJECT_DIR$/daishu_user_web/pom.xml" />
+        <option value="$PROJECT_DIR$/daishu_order_service/pom.xml" />
       </list>
     </option>
   </component>

@@ -25,6 +25,7 @@ public class CartController {
     @Autowired
     private HttpServletResponse response;
     @RequestMapping("/findCartList")
+
     public List<Cart> findCartList() {
         //获取登入人账号信息
 //        String username="zhangsan";
@@ -41,22 +42,23 @@ public class CartController {
             return cartList_cookie;
         }else {
             List<Cart> cartList_redis =CartInterface.findCartListFromRedis(username);//从redis中提取
-            System.out.println("从redis中获取");
             if(cartList_cookie.size()>0){//如果本地存在购物车
-                System.out.println("合并");
                 //合并购物车
-                cartList_redis=CartInterface.mergeCartList(cartList_redis, cartList_cookie);
+                cartList_redis=CartInterface.mergeCartList(cartList_cookie,cartList_redis);
                 //清除本地cookie的数据
                 CookieUtil.deleteCookie(request, response, "cartList");
                 //将合并后的数据存入redis
                 CartInterface.saveCartListToRedis(username, cartList_redis);
             }
+            cartList_redis =CartInterface.findCartListFromRedis(username);
             return cartList_redis;
         }
 
     }
     @RequestMapping("/addGoodsToCartList")
     public Result addGoodsToCartList(Long itemId,Integer num){
+        response.setHeader("Access-Control-Allow-Origin","http://192.168.90.127:9090");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
 //        String username="zhangsan";
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
@@ -77,5 +79,7 @@ public class CartController {
             return new Result(false,"存入购物车失败");
         }
     }
+
+
 
 }

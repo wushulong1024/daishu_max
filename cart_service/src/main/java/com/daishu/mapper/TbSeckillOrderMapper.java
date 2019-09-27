@@ -2,10 +2,11 @@ package com.daishu.mapper;
 
 import com.daishu.pojo.TbSeckillOrder;
 import com.daishu.pojo.TbSeckillOrderExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface TbSeckillOrderMapper {
     long countByExample(TbSeckillOrderExample example);
 

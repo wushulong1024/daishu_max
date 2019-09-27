@@ -92,6 +92,7 @@ public class CartInterfacrImpl implements CartInterface {
     @Override
     public void saveCartListToRedis(String username, List<Cart> cartList) {
         redisTemplate.boundHashOps("cartList").put(username,cartList);
+        System.out.println(username+"购物车保存成功");
     }
 
     /**
@@ -102,14 +103,42 @@ public class CartInterfacrImpl implements CartInterface {
      */
     @Override
     public List<Cart> mergeCartList(List<Cart> cartList1, List<Cart> cartList2) {
+        System.out.println("正在合并");
         for (Cart cart:cartList1) {
             for (TbOrderItem orderItem:cart.getOrderItemlist()) {
-                 cartList1 = addGoodsToCartList(cartList2, orderItem.getId(), orderItem.getNum());
+                 cartList1 = addGoodsToCartList(cartList2, orderItem.getItemId(), orderItem.getNum());
             }
         }
         return cartList1;
     }
+    /**
+     * 查找cart对象
+     */
+    @Override
+    public List<Cart> findGoodById(Long[] ids,String username) {
+        System.out.println(ids);
+        List<Cart> orderList=new ArrayList<>();
+        List<Cart> cartList = findCartListFromRedis(username);
+        for (int i = 0; i <ids.length; i++) {
+            Cart cart = findCartById(cartList, ids[i]);
+            if (cart!=null){
+                orderList.add(cart);
+            }
+        }
+        return orderList;
+    }
 
+
+    public Cart findCartById(List<Cart> cartList,Long id){
+        for (Cart cart:cartList) {
+            for (TbOrderItem orderItem:cart.getOrderItemlist()){
+                if (orderItem.getItemId().equals(id))
+                    return cart;
+            }
+
+        }
+        return null;
+    }
     /**
      * 在购物车中根据商家ID查找对应的购物车明细对象
      * @param list

@@ -13,4 +13,6 @@ public interface CartInterface {
     void saveCartListToRedis(String username,List<Cart> cartList);
     //合并购物
     List<Cart> mergeCartList(List<Cart> cartList1,List<Cart> cartList2);
+    //从redis购物车中查找商品
+    List<Cart> findGoodById(Long[] ids,String username);
 }
